@@ -5,7 +5,7 @@ import org.junit.Test;
 
 
 
-public class VuongLookAndSayAlgo {
+public class VuongLookAndSayGo2 {
 
   static String LookAndSay(String start, int n) {
 	if(n==0 || start.length()==0) return start;
