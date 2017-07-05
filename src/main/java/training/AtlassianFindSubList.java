@@ -8,7 +8,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 
-public class findLinkedList {
+public class AtlassianFindSubList {
     public static class LinkedListNode{
         String val;
         LinkedListNode next;
