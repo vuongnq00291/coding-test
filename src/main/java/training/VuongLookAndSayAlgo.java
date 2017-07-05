@@ -1,5 +1,9 @@
 package training;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -8,24 +12,20 @@ import org.junit.Test;
 public class VuongLookAndSayAlgo {
 
   static String LookAndSay(String start, int n) {
-	if(n==0 || start.length()==0) return start;
+	if(n==0) return start;
     while (n > 0) {
-    	String s="";
-    	int count =1;
-    	char c=start.charAt(0);
-    	for(int i=1;i<start.length();i++){
-    		if(c==start.charAt(i)){
-    			count++;
-    		}else{
-    			s=s+count+String.valueOf(c);
-    			c = start.charAt(i);
-    			count =1;
+    	String result="";
+    	List<Character> list = new ArrayList<Character>();
+    	for(int i=0;i<start.length();i++){
+    		list.add(start.charAt(i));
+    		if((i==start.length()-1)
+    				|| !(list.contains(start.charAt(i+1)))){
+    			result= result + (list.size()==0?"":
+    				String.valueOf(list.size())+list.get(0));
+    			list.clear();
     		}
-    		if(i==start.length()-1){
-				s=s+count+String.valueOf(c);
-			}
     	}
-    	start = s;
+    	start = result;
         n--;
     }
 
