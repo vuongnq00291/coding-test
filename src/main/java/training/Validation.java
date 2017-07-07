@@ -1,5 +1,8 @@
 package training;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Validation {
     
     public static void main(String[] args) {
@@ -17,14 +20,19 @@ public class Validation {
             String name = (String) names[1];
             int numberOfField = (Integer)names[0];
             int numberOfEmpty = 0;
+            List<Integer> emptyFields = new ArrayList<Integer>();
+            List<Integer> fields = new ArrayList<Integer>();
             for (String record : records) {
                 Object[] results = validateRecord(record, numberOfField);
                 if (numberOfField < (Integer)results[0]) {
                     numberOfField = (Integer)results[0];
                 }
-                numberOfEmpty += (Integer)results[1];
+                emptyFields.add((Integer)results[1]);
+                fields.add((Integer)results[0]);
             }
-            
+            for(int i=0;i< fields.size();i++){
+            	numberOfEmpty+=	emptyFields.get(i) + (numberOfField-fields.get(i));
+            }
             if ((Integer)names[0] < numberOfField) {
                 name = name + "_" + (numberOfField - (Integer)names[0]);
             }

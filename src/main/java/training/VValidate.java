@@ -1,14 +1,16 @@
 package training;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class VValidate {
     
     public static void main(String[] args) {
         System.out.println(validate("|name|address|"
-        		+ "~n|Patrick|pat@test.com|"
-        		+ "~n||||Annie||annie@test.com|~n"));
+        		+ "~n||1|Patrick|pat@test.com|"
+        		+ "~n||||Annie||annie@test.com|~n|"));
         //System.out.println(validate("|name|address|~n|Patrick|pat@test.com|~n|Annie||annie@test.com|~n"));
     }
     
@@ -22,19 +24,25 @@ public class VValidate {
             String name = (String) names[1];
             int numberOfField = (Integer)names[0];
             int numberOfEmpty = 0;
-            for (String record : records) {
-                Object[] results = validateRecord(record, numberOfField);
+            List<Integer> emptyFields = new ArrayList<Integer>();
+            List<Integer> fields = new ArrayList<Integer>();
+            for (int i=1;i<records.length;i++) {
+                Object[] results = validateRecord(records[i], numberOfField);
                 if (numberOfField < (Integer)results[0]) {
                     numberOfField = (Integer)results[0];
                 }
-                numberOfEmpty += (Integer)results[1];
+                emptyFields.add((Integer)results[1]);
+                fields.add((Integer)results[0]);
             }
-            
+            for(int i=0;i< fields.size();i++){
+            	numberOfEmpty+=	emptyFields.get(i) + (numberOfField-fields.get(i));
+            }
             if ((Integer)names[0] < numberOfField) {
                 name = name + "_" + (numberOfField - (Integer)names[0]);
             }
             return (records.length-1) + ":" + numberOfField + ":" + numberOfEmpty + ":" + name;
         } catch (Exception e) {
+        	e.printStackTrace();
             return "0:0:0:format_error";
         }
     }
@@ -68,6 +76,12 @@ public class VValidate {
         if (!record.startsWith("|") || !record.endsWith("|")) {
             throw new Exception();
         }
+        if(record.length()==1){
+        	Object[] results = new Object[3];
+            results[0] = 0;
+            results[1] = 0;
+            return results;
+        }
         record = record.substring(1, record.length()-1) ;
     	String[] records = record.split("\\|",-1);
         int numberOfField = records.length;
@@ -78,13 +92,9 @@ public class VValidate {
     		}
     	}
         
-        int missfields = 0;
-        if((headers-numberOfField)>0){
-        	missfields  = headers-numberOfField;
-        }
         Object[] results = new Object[3];
         results[0] = numberOfField;
-        results[1] = numberOfEmpty+missfields;
+        results[1] = numberOfEmpty;
         return results;
         
     }
