@@ -1,9 +1,12 @@
 package training;
 
-public class Validation {
+import java.util.HashSet;
+import java.util.Set;
+
+public class VValidate {
     
     public static void main(String[] args) {
-        System.out.println(validate("|name|address|~n|Patrick|pat@test.com|~n|Annie||annie@test.com|~n"));
+        System.out.println(validate("|name|address|time|~n|Pat~1rick|pat@test.com|~n|Annie||annie@test.com|~n"));
         //System.out.println(validate("|name|address|~n|Patrick|pat@test.com|~n|Annie||annie@test.com|~n"));
     }
     
@@ -39,9 +42,13 @@ public class Validation {
         }
     	record.replaceAll("~|", "__");
     	record = record.substring(1, record.length()-1) ;
-    	String[] names = record.split("\\|");
+    	String[] names = record.split("\\|",-1);
+    	Set<String> namecheck = new HashSet<String>();
     	for(String s:names){
     		if(s.length()==0 || s.trim().length()==0){
+    			 throw new Exception();
+    		}
+    		if(!namecheck.add(s)){
     			 throw new Exception();
     		}
     	}
@@ -105,9 +112,7 @@ public class Validation {
             if (c == '~') {
                 i++;
                 char nextChar = msg.charAt(i);
-                if (nextChar == '~') {
-                    i++;
-                } else if (nextChar != '|' && nextChar != 'n') {
+                if (nextChar != '|' && nextChar != 'n' && nextChar != '~') {
                     throw new Exception();
                 }
             }
