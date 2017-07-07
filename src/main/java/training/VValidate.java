@@ -6,16 +6,18 @@ import java.util.Set;
 public class VValidate {
     
     public static void main(String[] args) {
-        System.out.println(validate("|name|address|time|~n|Pat~1rick|pat@test.com|~n|Annie||annie@test.com|~n"));
+        System.out.println(validate("|name|address|"
+        		+ "~n|Patrick|pat@test.com|"
+        		+ "~n||||Annie||annie@test.com|~n"));
         //System.out.println(validate("|name|address|~n|Patrick|pat@test.com|~n|Annie||annie@test.com|~n"));
     }
     
     public  static String validate(String msg) {
         try {
-            validateSingleCharactor(msg);
+        	validateSingle(msg);
             validateEscape(msg);
             String[] records = msg.split("\\~n");
-            trimRecord(records);
+            correct(records);
             Object[] names = validateHeader(records[0]);
             String name = (String) names[1];
             int numberOfField = (Integer)names[0];
@@ -66,19 +68,16 @@ public class VValidate {
         if (!record.startsWith("|") || !record.endsWith("|")) {
             throw new Exception();
         }
-        record.replaceAll("~|", "__");
-        int numberOfField = 1;
+        record = record.substring(1, record.length()-1) ;
+    	String[] records = record.split("\\|",-1);
+        int numberOfField = records.length;
         int numberOfEmpty = 0;
-        for (int i=1;i<record.length()-1; i++) {
-            char c = record.charAt(i);
-            if (c == '|') {
-                numberOfField++;
-                if (record.charAt(i+1) == '|'){
-                    numberOfEmpty++;
-                }
-                
-            }
-        }
+        for(String s:records){
+    		if(s.length()==0 || s.trim().length()==0){
+    			numberOfEmpty++;
+    		}
+    	}
+        
         int missfields = 0;
         if((headers-numberOfField)>0){
         	missfields  = headers-numberOfField;
@@ -93,7 +92,7 @@ public class VValidate {
     /**
      * @param record
      */
-    private static String[] trimRecord(String[] records) {
+    private static String[] correct(String[] records) {
         for (int i=0; i<records.length; i++ ) {
             while (records[i].startsWith("~n")) {
                 records[i] = records[i].substring(2);
@@ -105,13 +104,13 @@ public class VValidate {
     /**
      * @param msg
      */
-    private  static void validateEscape(String msg) throws Exception {
+    private  static void validateEscape(String s) throws Exception {
         int i = 0;
-        while (i < msg.length()) {
-            char c = msg.charAt(i);
+        while (i < s.length()) {
+            char c = s.charAt(i);
             if (c == '~') {
                 i++;
-                char nextChar = msg.charAt(i);
+                char nextChar = s.charAt(i);
                 if (nextChar != '|' && nextChar != 'n' && nextChar != '~') {
                     throw new Exception();
                 }
@@ -120,13 +119,10 @@ public class VValidate {
         }
     }
 
-    /**
-     * @param msg
-     */
-    private static void validateSingleCharactor(String msg) throws Exception {
+    private static void validateSingle(String s) throws Exception {
         int i = 0;
-        while (i < msg.length()) {
-            char c = msg.charAt(i);
+        while (i < s.length()) {
+            char c = s.charAt(i);
             if (c < 0x20 || c > 0x7E) {
                 throw new Exception();
             }
