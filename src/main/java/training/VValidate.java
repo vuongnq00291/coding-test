@@ -10,7 +10,7 @@ public class VValidate {
     public static void main(String[] args) {
         System.out.println(validate("|name|address|"
         		+ "~n||1|Patrick|pat@test.com|"
-        		+ "~n||||Annie||annie@test.com|~n|"));
+        		+ "~n||||Annie||annie@test.com|~n"));
         //System.out.println(validate("|name|address|~n|Patrick|pat@test.com|~n|Annie||annie@test.com|~n"));
     }
     
