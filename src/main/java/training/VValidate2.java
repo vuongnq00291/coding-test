@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class VValidate {
+public class VValidate2 {
     
     public static void main(String[] args) {
 //        System.out.println(validate("|name|address|"
